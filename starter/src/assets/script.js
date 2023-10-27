@@ -15,21 +15,21 @@ const products = [
     price: 1.5,
     quantity: 0,
     productId: 100,
-    image: "/images/cherry.jpg"
+    image: "./images/cherry.jpg"
   },
   {
     name: "orange",
     price: 2,
     quantity: 0,
     productId: 101,
-    image: "/images/orange.jpg"
+    image: "./images/orange.jpg"
   },
   {
     name: "strawberry",
     price: 3,
     quantity: 0,
     productId: 102,
-    image: "/images/strawberry.jpg"
+    image: "./images/strawberry.jpg"
   }
 ]
 
@@ -42,7 +42,7 @@ const products = [
 
 /* Declare an empty array named cart to hold the items in the cart */
 
-const cart = [];
+let cart = [];
 /* Create a function named addProductToCart that takes in the product productId as an argument
   - addProductToCart should get the correct product based on the productId
   - addProductToCart should then increase the product's quantity
@@ -136,7 +136,10 @@ function cartTotal() {
 /* Create a function called emptyCart that empties the products from the cart */
 
 function emptyCart() {
-  cart = [];
+  cart.length = 0;
+  products.forEach(function(product) {
+    product.quantity = 0;
+  });
 }
 /* Create a function named pay that takes in an amount as an argument
   - amount is the money paid by customer
@@ -144,9 +147,17 @@ function emptyCart() {
   - pay will return a positive number if money should be returned to customer
   Hint: cartTotal function gives us cost of all the products in the cart  
 */
-function pay(amount) {
-  return amount - cartTotal();
+let totalPaid = 0;
 
+function pay(amount) {
+  totalPaid += amount;
+  let remaining = totalPaid - cartTotal();
+  if (remaining >= 0) {
+    totalPaid = 0;
+    
+  }
+  emptyCart();
+  return remaining;
 }
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 
