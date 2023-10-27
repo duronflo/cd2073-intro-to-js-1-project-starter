@@ -136,10 +136,12 @@ function cartTotal() {
 /* Create a function called emptyCart that empties the products from the cart */
 
 function emptyCart() {
-  cart.length = 0;
-  products.forEach(function(product) {
+
+  products.forEach(function (product) {
     product.quantity = 0;
+    removeProductFromCart(product);
   });
+  cart.length = 0;
 }
 /* Create a function named pay that takes in an amount as an argument
   - amount is the money paid by customer
@@ -154,13 +156,70 @@ function pay(amount) {
   let remaining = totalPaid - cartTotal();
   if (remaining >= 0) {
     totalPaid = 0;
-    
+    emptyCart();
   }
-  emptyCart();
+
   return remaining;
 }
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 
+let currentCurrency = "USD";
+
+// selection can only performed beforehand not during shopping TODO:
+
+
+function currency(newCurrency) {
+
+  function convProducts(currencyFac) {
+    products.forEach(function (product) {
+      product.price *= currencyFac;
+    })
+  }
+
+  switch (newCurrency) {
+    case "USD":
+      switch (currentCurrency) {
+        case "EUR":
+          convProducts(1.06);
+          break;
+        case "YEN":
+          convProducts(0.0067);
+          break;
+        default:
+          break;
+      }
+      break;
+    case "EUR":
+      switch (currentCurrency) {
+        case "USD":
+          convProducts(0.94);
+          break;
+        case "YEN":
+          convProducts(0.0063);
+          break;
+        default:
+          break;
+      }
+      break;
+    case "YEN":
+      switch (currentCurrency) {
+        case "EUR":
+          convProducts(158.43);
+          break;
+        case "USD":
+          convProducts(149.66);
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
+      // do nothing due to no valid currency
+      break;
+  }
+  currentCurrency = newCurrency;
+
+}
 
 /* The following is for running unit tests. 
    To fully complete this project, it is expected that all tests pass.
@@ -178,6 +237,5 @@ module.exports = {
   cartTotal,
   pay,
   emptyCart,
-  /* Uncomment the following line if completing the currency converter bonus */
-  // currency
+  currency
 }
